@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import tr.org.lkd.lyk2015.camp.model.Admin;
+import tr.org.lkd.lyk2015.camp.model.Instructor;
 
 
 @Controller
@@ -21,7 +22,7 @@ public class AdminController {
 	}*/
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createForm(@ModelAttribute AdminController todo) {
+	public String createForm(@ModelAttribute Admin admin) {
 		
 		return "adminCreateForm";
 	}

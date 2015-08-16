@@ -2,53 +2,66 @@
 <th:block th:fragment="content">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 well">
-			<h1>Admin Create Form </h1>
+			<h1>Admin Create Form</h1>
 			<p th:text="${message}" />
-		
 
-		<!-- 	create form  start-->
+			<!-- 	create form  start-->
 
-		<form>
-			<div class="col-md-4">
-			
-			<div class="form-group">
-				<label for="exampleInputName">Name</label> <input
-					type="text" class="form-control" id="exampleInputName"
-					placeholder="Name">
-			</div>
-			<div class="form-group">
-				<label for="exampleInputSurname">Surname</label> <input
-					type="text" class="form-control" id="exampleInputSurname"
-					placeholder="Surname">
-			</div>
-				<div class="form-group">
-				<label for="exampleInputEmail">Email address</label> <input
-					type="email" class="form-control" id="exampleInputEmail"
-					placeholder="Email">
-			</div>
-			<div class="form-group">
-				<label for="exampleInputPassword1">Password</label> <input
-					type="password" class="form-control" id="exampleInputPassword1"
-					placeholder="Password">
-			</div>
-			
-			<div class="form-group">
-				<label for="exampleInputBirthdate">BirthDate</label> <input
-					type="text" class="form-control" id="exampleInputBirthdate"
-					placeholder="BirthDate">
-			</div>
-			
-			<div class="form-group">
-				<label for="exampleInputTckn">TC KN</label> <input
-					type="text" class="form-control" id="exampleInputTckn"
-					placeholder="TC KN">
-			</div>
-			<button type="submit" class="btn btn-info">Submit</button>
-			</div>
-		</form>
+			<form action="#" th:action="@{/admins/create}" th:object="${admin}"
+				method="post">
+				<div class="col-md-4">
 
+					<div class="form-group">
+						<label for="InputName">Name</label> <input type="text"
+							class="form-control" id="name" placeholder="Name"
+							th:field="*{name}">
+					</div>
+					<div class="form-group">
+						<label for="InputSurname">Surname</label> <input type="text"
+							class="form-control" id="surname" placeholder="Surname"
+							th:field="*{surname}">
+					</div>
 
-		<!-- 	create form  stop-->
+					<div class="form-group">
+						<label for="InputEmail">Email address</label> <input type="email"
+							class="form-control" id="email" placeholder="Email"
+							th:field="*{email}">
+					</div>
+					<div class="form-group">
+						<label for="InputPassword1">Password</label> <input
+							type="password" class="form-control" id="password"
+							placeholder="Password" th:field="*{password}">
+					</div>
+
+					<div class="form-group">
+						<label for="InputBirthdate">BirthDate</label> <input type="number"
+							class="form-control" id="birthDate" placeholder="BirthDate"
+							th:field="*{birthDate}">
+					</div>
+
+					<div class="form-group">
+						<label for="InputLkdNo">LKD No</label> <input type="text"
+							class="form-control" id="lkdNo" placeholder="LKDNo"
+							th:field="*{lkdNo}">
+					</div>
+
+					<div class="form-group">
+						<label for="InputLkdNo">Phone</label> <input type="text"
+							class="form-control" id="phone" placeholder="phone"
+							th:field="*{phone}">
+					</div>
+
+					<div class="form-group">
+						<label for="InputTckn">TC KN</label> <input type="text"
+							class="form-control" id="tckn" placeholder="TC KN"
+							th:field="*{tckn}">
+					</div>
+					<button type="submit" class="btn btn-info">Submit</button>
+
+				</div>
+			</form>
+
+			<!-- 	create form  stop-->
 		</div>
 	</div>
 
