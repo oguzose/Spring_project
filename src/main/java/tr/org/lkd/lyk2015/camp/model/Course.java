@@ -3,36 +3,31 @@ package tr.org.lkd.lyk2015.camp.model;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class Course extends AbstractBaseModel{
- 
+public class Course extends AbstractBaseModel {
+
 	private String name;
 	private String description;
-	private String prerequisites;
+	private String prerequisities;
+
 	private String detailPageLink;
-	
-	
-	
+	private Boolean active = true;
+
 	public Boolean getActive() {
-		return active;
+		return this.active;
 	}
 
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
-	private Boolean active;
-	
 	@ManyToMany
 	private Set<Instructor> instructors;
 
-
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -40,23 +35,23 @@ public class Course extends AbstractBaseModel{
 	}
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getPrerequisites() {
-		return prerequisites;
+	public String getPrerequisities() {
+		return this.prerequisities;
 	}
 
-	public void setPrerequisites(String prerequisites) {
-		this.prerequisites = prerequisites;
+	public void setPrerequisities(String prerequisities) {
+		this.prerequisities = prerequisities;
 	}
 
 	public String getDetailPageLink() {
-		return detailPageLink;
+		return this.detailPageLink;
 	}
 
 	public void setDetailPageLink(String detailPageLink) {
@@ -64,11 +59,11 @@ public class Course extends AbstractBaseModel{
 	}
 
 	public Set<Instructor> getInstructors() {
-		return instructors;
+		return this.instructors;
 	}
 
 	public void setInstructors(Set<Instructor> instructors) {
 		this.instructors = instructors;
-	} 
-	
+	}
+
 }

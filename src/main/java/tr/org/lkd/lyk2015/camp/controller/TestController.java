@@ -5,15 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/test") // "/" urlinde calıs..
+@RequestMapping("/test")
 public class TestController {
-	
+
 	@RequestMapping("")
-	public String test(Model model){
+	public String home(Model model){
 		model.addAttribute("message", "Welcome message!");
 		return "test";
 	}
-	
-	
-
 }

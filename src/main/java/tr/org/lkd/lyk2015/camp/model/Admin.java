@@ -14,7 +14,6 @@ public class Admin extends AbstractUser{
 	public void setLkdNo(String lkdNo) {
 		this.lkdNo = lkdNo;
 	}
-
 	
 	
 }
