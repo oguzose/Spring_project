@@ -2,7 +2,8 @@ package tr.org.lkd.lyk2015.camp.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class WebAppInitializer  extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebAppInitializer extends
+		AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -12,8 +13,8 @@ public class WebAppInitializer  extends AbstractAnnotationConfigDispatcherServle
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		
-		 return new Class[] { WebConfig.class };
+
+		return new Class[] { WebConfig.class };
 	}
 
 	@Override

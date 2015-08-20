@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -49,16 +50,38 @@ public class ApplicationController {
 			BindingResult bindingResult, Model model) {
 		// bindingresult her zaman solundaki formun hatalarını alır
 		model.addAttribute("courseList", this.courseService.getAll());
-
 		if (bindingResult.hasErrors()) {
 			return "application/applicationForm";
 		}
 
 		this.applicationService.create(applicationFormDto);
 
-		model.addAttribute("message", "kaydınız başarılı");
+		return "redirect:/application/success";
+	}
 
-		return "application/applicationSuccess";
+	@RequestMapping(value = "/success", method = RequestMethod.GET)
+	public String success(Model model) {
+		model.addAttribute("message", "Başvurunuz Başarıyla Kaydedildi");
+		return "application/success";
+	}
+
+	@RequestMapping(value = "/validate/{id}", method = RequestMethod.GET)
+	public String validate(@PathVariable("id") String id, Model model) {
+
+		if (this.applicationService.validate(id)) {
+			model.addAttribute("message", "Başvurunuz Başarıyla Kaydedildi.");
+			return "application/validated";
+		} else {
+			model.addAttribute("message", "Böyle bir form bulunmamaktadır.");
+			return "application/validated";
+		}
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public String list(Model model) {
+
+		model.addAttribute("applications", this.applicationService.getAll());
+		return "application/listApplication";
 	}
 
 }

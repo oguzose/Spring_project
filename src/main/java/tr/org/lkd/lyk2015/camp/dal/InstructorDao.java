@@ -14,7 +14,7 @@ public class InstructorDao extends GenericDao<Instructor> {
 		Criteria c = createCriteria();
 
 		c.add(Restrictions.idEq(id));
-		c.setFetchMode("couses", FetchMode.JOIN);
+		c.setFetchMode("courses", FetchMode.JOIN);
 
 		return (Instructor) c.uniqueResult();
 	}

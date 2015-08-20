@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import tr.org.lkd.lyk2015.camp.model.AbstractBaseModel;
 import tr.org.lkd.lyk2015.camp.dal.GenericDao;
-
+import tr.org.lkd.lyk2015.camp.model.AbstractBaseModel;
 
 @Transactional
-public abstract class GenericService<T extends AbstractBaseModel> implements Serializable {
+public abstract class GenericService<T extends AbstractBaseModel> implements
+		Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 
 	public GenericService() {
 		Class<?> type = this.getClass().getSuperclass();
-		logger = LoggerFactory.getLogger(type);
+		this.logger = LoggerFactory.getLogger(type);
 	}
 
 	@Autowired
@@ -33,7 +33,7 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 			throw new RuntimeException("Model cannot be null");
 		}
 
-		return genericDao.create(t);
+		return this.genericDao.create(t);
 	}
 
 	public T getById(final Long id) {
@@ -42,7 +42,7 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 			throw new RuntimeException("Id cannot be null");
 		}
 
-		return genericDao.getById(id);
+		return this.genericDao.getById(id);
 	}
 
 	public T update(final T t) {
@@ -51,7 +51,7 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 			throw new RuntimeException("Model cannot be null");
 		}
 
-		return genericDao.update(t);
+		return this.genericDao.update(t);
 	}
 
 	public void delete(final T t) {
@@ -60,7 +60,7 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 			throw new RuntimeException("Model cannot be null");
 		}
 
-		genericDao.delete(t);
+		this.genericDao.delete(t);
 	}
 
 	public void delete(final Long id) {
@@ -69,12 +69,12 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 			throw new RuntimeException("id cannot be null");
 		}
 
-		genericDao.delete(this.getById(id));
+		this.genericDao.delete(this.getById(id));
 	}
 
 	public List<T> getAll() {
 
-		return genericDao.getAll();
+		return this.genericDao.getAll();
 	}
 
 	public void hardDelete(final T t) {
@@ -83,6 +83,6 @@ public abstract class GenericService<T extends AbstractBaseModel> implements Ser
 			throw new RuntimeException("Model cannot be null");
 		}
 
-		genericDao.delete(t);
+		this.genericDao.delete(t);
 	}
 }

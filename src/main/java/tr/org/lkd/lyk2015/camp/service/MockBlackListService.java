@@ -1,10 +1,8 @@
 package tr.org.lkd.lyk2015.camp.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
-@Service
-@Transactional
+@Component
 public class MockBlackListService implements BlackListService {
 
 	@Override

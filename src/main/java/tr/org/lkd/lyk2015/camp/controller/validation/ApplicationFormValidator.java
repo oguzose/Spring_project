@@ -99,13 +99,6 @@ public class ApplicationFormValidator implements Validator {
 					"Ön sınavı geçmemişsiniz!");
 		}
 
-		// email confirmation
-		boolean sendMail = this.emailService.sendConfirmation(
-				student.getEmail(), "confirmation", "buraya tıkla");
-		if (!sendMail) {
-			errors.rejectValue("student.email", "error.checkConfirmation",
-					"Email Gönderilemedi!");
-		}
 	}
 
 }

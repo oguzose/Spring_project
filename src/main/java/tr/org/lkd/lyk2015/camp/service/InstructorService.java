@@ -3,6 +3,7 @@ package tr.org.lkd.lyk2015.camp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +22,20 @@ public class InstructorService extends GenericService<Instructor> {
 	@Autowired
 	private CourseDao courseDao;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	public void create(Instructor instructor, List<Long> ids) {
 
 		List<Course> courses = this.courseDao.getByIds(ids);
 		instructor.getCourses().addAll(courses);
 		/*
 		 * Set<Course> setCourse = new HashSet<>(); setCourse.addAll(courses);
-		 * 
+		 *
 		 * instructor.setCourses(setCourse);
 		 */
-
+		instructor.setPassword(this.passwordEncoder.encode(instructor
+				.getPassword()));
 		this.instructorDao.create(instructor);
 	}
 

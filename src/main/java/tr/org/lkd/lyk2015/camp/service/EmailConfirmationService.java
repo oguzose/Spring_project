@@ -16,11 +16,13 @@ import org.springframework.stereotype.Component;
 public class EmailConfirmationService implements EmailService {
 
 	@Override
-	public boolean sendConfirmation(String to, String subject, String context) {
+	public boolean sendConfirmation(String sendTo, String subject,
+			String content) {
 
 		final String username = "lyk2015java@gmail.com";
 		final String from = "lyk2015java@gmail.com";
 		final String password = "510B619-J1|#!rD";
+		final String to = sendTo;
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -42,22 +44,19 @@ public class EmailConfirmationService implements EmailService {
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(to));
-			message.setSubject("LYK - Aktivasyon Mesajı"); // subject
-			message.setText("Dear " + "," + "\n\n!" + context);
+			message.setSubject(subject);
+			message.setText(content);
 
 			Transport.send(message);
 
 			System.out.println("Done");
 			System.out.println("Sent message successfully....");
-
-			return true;
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
-
+			return false;
 		}
 
-		return false;
+		return true;
 
 	}
-
 }
