@@ -20,4 +20,13 @@ public class Admin extends AbstractUser {
 		this.lkdNo = lkdNo;
 	}
 
+	/*
+	 * 
+	 * @Override public Collection<? extends GrantedAuthority> getAuthorities()
+	 * { SimpleGrantedAuthority simpleGrantedAutohirty = new
+	 * SimpleGrantedAuthority("Admin");
+	 * 
+	 * return list; }
+	 */
+
 }

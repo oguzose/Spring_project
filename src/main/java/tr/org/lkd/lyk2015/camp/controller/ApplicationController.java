@@ -37,19 +37,15 @@ public class ApplicationController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String getCourseCreate(
-			@ModelAttribute("form") ApplicationFormDto applicationFormDto,
-			Model model) {
-		model.addAttribute("courseList", this.courseService.getAll());
+	public String getCourseCreate(@ModelAttribute("form") ApplicationFormDto applicationFormDto, Model model) {
+		model.addAttribute("courses", this.courseService.getAll());
 		return "application/applicationForm";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String postAdminCreate(
-			@ModelAttribute("form") @Valid ApplicationFormDto applicationFormDto,
-			BindingResult bindingResult, Model model) {
+	public String postAdminCreate(@ModelAttribute("form") @Valid ApplicationFormDto applicationFormDto, BindingResult bindingResult, Model model) {
 		// bindingresult her zaman solundaki formun hatalarını alır
-		model.addAttribute("courseList", this.courseService.getAll());
+		model.addAttribute("courses", this.courseService.getAll());
 		if (bindingResult.hasErrors()) {
 			return "application/applicationForm";
 		}

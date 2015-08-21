@@ -55,13 +55,22 @@ public class ApplicationService extends GenericService<Application> {
 		// UUID ÜRET Ve link hazırla
 		String url = URL_BASE + this.generateUUID(application);
 
+		/*
+		 * String uuid = UUID.randomUUID().toString();
+		 *
+		 * String password = UUID.randomUUID().toString();
+		 *
+		 * password = password.substring(0, 5); url = URL_BASE + uuid;
+		 *
+		 * String emailContnet = " Doğrulamak için tıklayınız" + url +
+		 * "Parolaniz" + password;
+		 */
+
 		// COURSELARI ALIP SET EDELİM
-		this.getCoursesByIds(application,
-				applicationFormDto.getPreferredCourseIds());
+		this.getCoursesByIds(application, applicationFormDto.getPreferredCourseIds());
 
 		// APPLICATION OBJESİNE STUDENTİ BAĞLAYALIM
-		if (this.studentDao
-				.getByTckn(applicationFormDto.getStudent().getTckn()) == null) {
+		if (this.studentDao.getByTckn(applicationFormDto.getStudent().getTckn()) == null) {
 			// BOYLE YAPMAMIZIN NEDENI STUDENTI DATABASEDEN ÇEKMEMİZ GEREKİYOR
 			// YOKSA OLMAZ; CASCADE EKLEMEMİZ GEREKİYOR
 			// STUDENTI OLUŞTURUP SONRA APPLICATION ILE İLİŞKİLENDİREBİLİRZ
@@ -71,17 +80,13 @@ public class ApplicationService extends GenericService<Application> {
 			application.setOwner(studentFromDao);
 
 		} else {
-			application.setOwner(this.studentDao.getByTckn(applicationFormDto
-					.getStudent().getTckn()));
+			application.setOwner(this.studentDao.getByTckn(applicationFormDto.getStudent().getTckn()));
 		}
 
-		String uuid = UUID.randomUUID().toString();
-		application.getOwner().setPassword(
-				this.passwordEncoder.encode("lyk2015"));
+		application.getOwner().setPassword(this.passwordEncoder.encode("lyk2015"));
 		application.setYear(Calendar.getInstance().get(Calendar.YEAR));
 
-		if (this.emailService.sendConfirmation(student.getEmail(),
-				"Başvuru Onayı", url)) {
+		if (this.emailService.sendConfirmation(student.getEmail(), "Başvuru Onayı", url)) {
 			System.out.println("email gönderildi.");
 		} else {
 			System.out.println("email gönderilemedi");
@@ -105,21 +110,23 @@ public class ApplicationService extends GenericService<Application> {
 
 	public boolean validate(String validationId) {
 
-		Application application = this.applicationDao
-				.getByValidationId(validationId);
+		Application application = this.applicationDao.getByValidationId(validationId);
 		Student student = application.getOwner();
 		application.setValidated(true);
 		// update çağırmasam da transactional old için
 		// yaptığımd eğişiklikleri direk database yazar
 		this.applicationDao.update(application);
-		if (this.emailService.sendConfirmation(student.getEmail(),
-				"Başvuru Formu Doğrulaması", onayMesajı)) {
+		if (this.emailService.sendConfirmation(student.getEmail(), "Başvuru Formu Doğrulaması", onayMesajı)) {
 			System.out.println("email gönderildi.");
 		} else {
 			System.out.println("email gönderilemedi");
 		}
 		return true;
 
+	}
+
+	public ApplicationFormDto createApplicationFormDto() {
+		return null;
 	}
 
 }

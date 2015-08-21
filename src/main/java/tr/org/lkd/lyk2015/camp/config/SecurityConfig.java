@@ -25,18 +25,16 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/application", "/admins/create",
-						"/admins/create/", "/resources/**").permitAll()
+		http.authorizeRequests().antMatchers("/application", "/admins/create", "/admins/create/", "/resources/**").permitAll()
+		// izin ver
 				.antMatchers(HttpMethod.POST, "/admins").permitAll()
-				.anyRequest().authenticated().and().formLogin().and().logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+				// izin ver
+				.anyRequest().authenticated().and().formLogin().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 	}
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth.userDetailsService(this.userDetailsService);
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(this.userDetailsService); // userDetailservice
 	}
 
 	@Bean
@@ -47,14 +45,14 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return authProvider;
 	}
 
+	// Dependncy pool a at
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth)
-			throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(this.authProvider());
 	}
 }

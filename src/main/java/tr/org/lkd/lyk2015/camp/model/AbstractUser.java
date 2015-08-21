@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @MappedSuperclass
 public abstract class AbstractUser extends AbstractBaseModel implements
+// implemenent et
 		UserDetails {
 
 	@NotEmpty
@@ -98,6 +99,7 @@ public abstract class AbstractUser extends AbstractBaseModel implements
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+
 		// TODO Auto-generated method stub
 		return null;
 	}
