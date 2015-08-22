@@ -13,12 +13,15 @@ public abstract class AbstractBaseModel {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@Column(nullable = false)
 	private Calendar createDate;
+
 	@Column(nullable = false)
 	private Calendar updateDate;
 
 	private Calendar deleteDate;
+
 	@Column(nullable = false)
 	private Boolean deleted = false;
 

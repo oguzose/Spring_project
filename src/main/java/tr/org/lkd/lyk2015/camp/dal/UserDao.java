@@ -11,6 +11,7 @@ public class UserDao extends GenericDao<AbstractUser> {
 
 	public AbstractUser getUserByEmail(String email) {
 		Criteria c = this.createCriteria();
+
 		c.add(Restrictions.eq("email", email));// email var mı yok mu
 		return (AbstractUser) c.uniqueResult();
 	}

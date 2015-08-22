@@ -1,10 +1,6 @@
-
+<meta charset="utf-8">
 <th:block th:fragment="form">
-
-	<div class="form-group">
-		<label for="InputName">Name</label> <input type="text"
-			class="form-control" id="name" placeholder="Name" th:field="*{name}"
-			th:value="*{name}">
-	</div>
-
+	<input type="hidden" th:field="*{createDate}" th:value="${createDate}">
+	<input type="hidden" th:field="*{updateDate}" th:value="${updateDate}">
+	<input type="hidden" th:field="*{deleteDate}" th:value="${deleteDate}">	
 </th:block>

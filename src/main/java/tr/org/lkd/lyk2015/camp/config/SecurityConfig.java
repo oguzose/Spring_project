@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,15 +24,25 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/application", "/admins/create", "/admins/create/", "/resources/**").permitAll()
-		// izin ver
-				.antMatchers(HttpMethod.POST, "/admins").permitAll()
-				// izin ver
-				.anyRequest().authenticated().and().formLogin().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+		// ziyaretçi -> courses list , instructor list, application
+		// başvuru formunu görülür
+		// admin -> instructor ekle
+		// course ve egitmen admin tarafından eklenir.
+		http.authorizeRequests()
+				.antMatchers("/courses", "/instructors", "/application",
+						"/application/success/**", "/application/validate/**",
+						"/resources/**")
+				.permitAll()
+				.antMatchers("/instructors/**", "/application/**",
+						"/courses/**", "/admins/**").hasAuthority("ADMIN")
+				.anyRequest().authenticated().and().logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.and().formLogin();
 	}
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	public void configureGlobal(AuthenticationManagerBuilder auth)
+			throws Exception {
 		auth.userDetailsService(this.userDetailsService); // userDetailservice
 	}
 
@@ -52,7 +61,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth)
+			throws Exception {
 		auth.authenticationProvider(this.authProvider());
 	}
 }

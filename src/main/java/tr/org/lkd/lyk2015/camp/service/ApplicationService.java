@@ -1,5 +1,7 @@
 package tr.org.lkd.lyk2015.camp.service;
 
+import java.security.AccessControlException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -57,36 +59,46 @@ public class ApplicationService extends GenericService<Application> {
 
 		/*
 		 * String uuid = UUID.randomUUID().toString();
-		 *
+		 * 
 		 * String password = UUID.randomUUID().toString();
-		 *
+		 * 
 		 * password = password.substring(0, 5); url = URL_BASE + uuid;
-		 *
+		 * 
 		 * String emailContnet = " Doğrulamak için tıklayınız" + url +
 		 * "Parolaniz" + password;
 		 */
 
 		// COURSELARI ALIP SET EDELİM
-		this.getCoursesByIds(application, applicationFormDto.getPreferredCourseIds());
+		this.getCoursesByIds(application,
+				applicationFormDto.getPreferredCourseIds());
+
+		String password = UUID.randomUUID().toString();
+		password = password.substring(0, 6);
 
 		// APPLICATION OBJESİNE STUDENTİ BAĞLAYALIM
-		if (this.studentDao.getByTckn(applicationFormDto.getStudent().getTckn()) == null) {
+		Student studentFromDao = this.studentDao.getByTckn(applicationFormDto
+				.getStudent().getTckn());
+
+		if (studentFromDao == null) {// student yoksa
 			// BOYLE YAPMAMIZIN NEDENI STUDENTI DATABASEDEN ÇEKMEMİZ GEREKİYOR
 			// YOKSA OLMAZ; CASCADE EKLEMEMİZ GEREKİYOR
 			// STUDENTI OLUŞTURUP SONRA APPLICATION ILE İLİŞKİLENDİREBİLİRZ
-			Student studentFromDao = new Student();
+			student.setPassword(this.passwordEncoder.encode(password));
+
 			this.studentDao.create(applicationFormDto.getStudent());
-			studentFromDao = applicationFormDto.getStudent();
+			studentFromDao = student;
 			application.setOwner(studentFromDao);
 
-		} else {
-			application.setOwner(this.studentDao.getByTckn(applicationFormDto.getStudent().getTckn()));
+		} else { // student var ise
+			application.setOwner(studentFromDao);
 		}
 
-		application.getOwner().setPassword(this.passwordEncoder.encode("lyk2015"));
 		application.setYear(Calendar.getInstance().get(Calendar.YEAR));
+		url = url + "\ngiriş bilgileriniz\n" + studentFromDao.getEmail()
+				+ "\nŞifreniz: " + password;
 
-		if (this.emailService.sendConfirmation(student.getEmail(), "Başvuru Onayı", url)) {
+		if (this.emailService.sendConfirmation(student.getEmail(),
+				"Başvuru Onayı", url)) {
 			System.out.println("email gönderildi.");
 		} else {
 			System.out.println("email gönderilemedi");
@@ -110,13 +122,19 @@ public class ApplicationService extends GenericService<Application> {
 
 	public boolean validate(String validationId) {
 
-		Application application = this.applicationDao.getByValidationId(validationId);
+		Application application = this.applicationDao
+				.getByValidationId(validationId);// boyle bir application varmı
+		if (application == null) {
+			return false;
+		}
+
 		Student student = application.getOwner();
 		application.setValidated(true);
 		// update çağırmasam da transactional old için
 		// yaptığımd eğişiklikleri direk database yazar
 		this.applicationDao.update(application);
-		if (this.emailService.sendConfirmation(student.getEmail(), "Başvuru Formu Doğrulaması", onayMesajı)) {
+		if (this.emailService.sendConfirmation(student.getEmail(),
+				"Başvuru Formu Doğrulaması", onayMesajı)) {
 			System.out.println("email gönderildi.");
 		} else {
 			System.out.println("email gönderilemedi");
@@ -125,8 +143,60 @@ public class ApplicationService extends GenericService<Application> {
 
 	}
 
-	public ApplicationFormDto createApplicationFormDto() {
-		return null;
+	public ApplicationFormDto createApplicationFormDto(Long id) {
+
+		Application application = this.applicationDao
+				.getStudentsApplication(id);
+		Student student = this.studentDao.getById(id);
+		List<Long> courseIds = new ArrayList<>();
+		for (Course course : application.getPreferredCourses()) {
+			courseIds.add(course.getId());
+		}
+
+		// null göndermemesi için
+		int emptySize = 3 - courseIds.size();
+		for (int i = 0; i < emptySize; i++) {
+			courseIds.add(null);
+		}
+
+		ApplicationFormDto applicationFormDto = new ApplicationFormDto();
+		applicationFormDto.setApplication(application);
+		applicationFormDto.setPreferredCourseIds(courseIds);
+		applicationFormDto.setStudent(student);
+
+		return applicationFormDto;
+
+	}
+
+	public void update(ApplicationFormDto applicationFormDto) {
+
+		Application application = applicationFormDto.getApplication();
+
+		this.getCoursesByIds(application,
+				applicationFormDto.getPreferredCourseIds());
+		Application applicationFromDb = this.applicationDao.getById(application
+				.getId());
+		applicationFromDb.setCorporation(application.getCorporation());
+		applicationFromDb.setGithubLink(application.getGithubLink());
+		applicationFromDb.setEnglishLevel(application.getEnglishLevel());
+		applicationFromDb.setNeedAccomodation(application.isNeedAccomodation());
+		applicationFromDb.setWorkDetails(application.getWorkDetails());
+		applicationFromDb.setOfficer(application.isOfficer());
+		applicationFromDb.setWorkStatus(application.getWorkStatus());
+
+	}
+
+	// ben kimim -- o application bu studentın mı
+	public void isUserAuthorizedForForm(Student student, Application application) {
+		Application applicationFromDb = this.applicationDao
+				.getStudentsApplication(student.getId());
+
+		if (applicationFromDb == null
+				|| !applicationFromDb.getId().equals(application.getId())) {
+			throw new AccessControlException(
+					"This form is not owned by current user");
+		}
+
 	}
 
 }
